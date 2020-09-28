@@ -1,0 +1,99 @@
+# https://github.com/We-ArE-GrOuP-69/project.git
+# Group 69
+
+def main(j):    # the main function for the game
+    global guesscount
+    guesscount += 1
+    if guesscount <= attempts:    # if users guesses has not exeeded number og attempst permitted, this will run
+        userGuess = (guess(guesscount))
+        if userGuess == magicNumber:
+            if guesscount > 1:
+                print('\n\n' + '*' * 55 + f'\nCongratulations, you guessed the number in {guesscount} attempts!!\n' + '*' * 55)
+            else:
+                print('\n\n' + '*' * 37 + '\nAmazing! you got it on the first try!\n' + '*' * 37)
+            global correct
+            correct = True
+        elif guesscount < attempts: # only works if number of guesses has not exeeded permittet tryes
+            if userGuess < magicNumber:
+                print('\n\n' + '-' * 22 + '\nThe number is too low!\n' + '-' * 22)
+            else:
+                print('\n\n' + '-' * 23 + '\nThe number is too high!\n' + '-' * 23)
+            if (attempts - guesscount) > 1:
+                print(f'You have {attempts - guesscount} attempts left\n')
+            else:
+                print('\n' + '*' * 9 + '\nLast try!\n' + '*' * 9)
+    else:# Run if user has not guessed the correct number in given attempts
+        print('\n\n\n' + '-' * 47 + '\nSorry!! You did not manage to guess the number.')
+        print('You have reached the guessing limit.\n' + '-' * 47)
+        print('\n' + '-' * 24 + f'\nThe magic number was {magicNumber}\n' + '-' * 24)
+
+def play():    # Restart if user wants to play again. End game if user don't want to play
+    global spelling
+    while spelling == False:
+        anwser = input('\nDo you want to play again? YES or NO: ')
+        if anwser.upper() == 'YES':# Restarting game
+            print('Have fun!')
+            spelling = True
+            break
+        elif anwser.upper() == 'NO': # Quits game
+            print('See you later.')
+            global playagain
+            playagain = False
+            spelling = True
+        else: # if the input is not "yes" or "no", with or without caps
+            print('\n\n' + '-' * 31)
+            print('Wrong input! Type "YES" or "NO"')
+            print('-' * 31)
+
+def guess(G):    # asks for input, and prosesses it into an acceptable value
+    while True:
+        guess = input(f'Please enter guess number {G}: ')
+        if guess.isdigit() and int(guess) <= lastnumber and int(guess) >= firstnumber: # Will only work with positive integers
+            guess = int(guess)
+            if guess <= lastnumber:
+                return guess
+            elif guess > lastnumber:
+                print('\n' * 2 + '-' * 40)
+                print(f'Your guess has to be between {firstnumber} and {lastnumber}!')
+                print('-' * 40)
+        else:
+            print('\n\n' + '-' * 49)
+            print(f'Wrong input, enter an integer between {firstnumber} and {lastnumber}!')
+            print('-' * 49)
+
+def reset():    # resets/starts the game, and generates a (new) number
+    global magicNumber
+    global guesscount
+    global attempts
+    global correct
+    global playagain
+    global spelling
+    global firstnumber
+    global lastnumber
+    # generates variables for the game. These can be changed if that is to be desired
+    # First number and last number: The guessing range
+    firstnumber = 1        
+    lastnumber = 1000
+    magicNumber = randint(firstnumber, lastnumber)
+    # These variables cannot be changed without disturbing th program
+    guesscount = 0
+    attempts = 5        # Number of attemts the user can have
+       # these variables are needed for the game to work
+    correct = False # Returning True if user has guessed the number
+    playagain = True # Returning False if user wants to end game
+    spelling = False # Decide if input from user is "YES" or "NO" in play()
+
+from random import randint    #imports randint. needed to generate a random number
+import time # ensures that the user gets the last message before program closes
+playagain = True
+while playagain == True:
+    reset()
+    print('\n' * 5)
+    print(f'In this game you are going to try to guess a random number between {firstnumber} and {lastnumber} in {attempts} attempts. \nShould you fail to do so, dont worry, you may try again, but the number you will be guessing at probably will be different.')
+    print('\n' * 5)
+    #print(magicNumber) # uncomment to see magicNumber before guessing
+    for i in range(attempts + 1):
+        if correct == False:
+            main(i + 1)
+    play()
+time.sleep(5) # waits 5 seconds before closing window
